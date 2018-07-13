@@ -32,6 +32,11 @@ public class DIMSpanConfig implements Serializable {
   private float minSupport = 1.0f;
 
   /**
+   * limit size of patterns which are discovered
+   */
+  private int maxSize = 100;
+
+  /**
    * Direction mode (true=directed; false=undirected)
    */
   private boolean directed = true;
@@ -76,6 +81,18 @@ public class DIMSpanConfig implements Serializable {
     this.directed = directed;
   }
 
+  /**
+   * valued constructor
+   * @param minSupport minimum relative support of a subgraph
+   * @param directed direction mode
+   * @param maxSize maximum size of discovered patterns
+   */
+  public DIMSpanConfig(float minSupport, boolean directed, int maxSize) {
+    this.minSupport = minSupport;
+    this.directed = directed;
+    this.maxSize = maxSize;
+  }
+
   @Override
   public String toString() {
     List<String> parameters = Lists.newArrayList();
@@ -108,6 +125,10 @@ public class DIMSpanConfig implements Serializable {
 
   public float getMinSupport() {
     return minSupport;
+  }
+
+  public int getMaxSize() {
+    return maxSize;
   }
 
   public void setMinSupport(float minSupport) {

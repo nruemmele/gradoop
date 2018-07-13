@@ -65,7 +65,7 @@ public class DIMSpan {
   /**
    * Maximum number of iterations if set of k-edge frequent patterns is not running empty before.
    */
-  private static final int MAX_ITERATIONS = 100;
+  protected int maxIterations = 100;
 
   /**
    * FSM configuration
@@ -110,6 +110,8 @@ public class DIMSpan {
    */
   public DIMSpan(DIMSpanConfig fsmConfig) {
     this.fsmConfig = fsmConfig;
+
+    this.maxIterations = fsmConfig.getMaxSize();
 
     // set gSpan implementation depending on direction mode
     gSpan = fsmConfig.isDirected() ?
@@ -191,7 +193,7 @@ public class DIMSpan {
     // ITERATION HEAD
 
     IterativeDataSet<GraphWithPatternEmbeddingsMap> iterative = searchSpace
-      .iterate(MAX_ITERATIONS);
+      .iterate(maxIterations);
 
     // ITERATION BODY
 
