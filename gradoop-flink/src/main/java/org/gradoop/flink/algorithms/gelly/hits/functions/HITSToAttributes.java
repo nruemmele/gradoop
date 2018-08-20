@@ -22,9 +22,11 @@ import org.gradoop.common.model.impl.pojo.Vertex;
 import org.gradoop.common.model.impl.properties.PropertyValue;
 
 /**
- * Stores HITS Results as Properties of a Vertex
+ * Stores HITS Results as Properties of a Vertex.
+ * If the HITS results are not available for the vertex, then the
+ * corresponding properties will be absent for the vertex
  */
-public class HITSToAttributes implements JoinFunction<HITS.Result<GradoopId>, Vertex, Vertex> {
+public class HITSToAttributes implements JoinFunction<Vertex, HITS.Result<GradoopId>, Vertex> {
 
   /**
    * Property Key to store the authority score
@@ -45,10 +47,12 @@ public class HITSToAttributes implements JoinFunction<HITS.Result<GradoopId>, Ve
   }
 
   @Override
-  public Vertex join(HITS.Result<GradoopId> result, Vertex vertex) throws Exception {
-    vertex.setProperty(authorityPropertyKey,
-      PropertyValue.create(result.getAuthorityScore().getValue()));
-    vertex.setProperty(hubPropertyKey, PropertyValue.create(result.getHubScore().getValue()));
+  public Vertex join(Vertex vertex, HITS.Result<GradoopId> result) throws Exception {
+    if (result != null) {
+      vertex.setProperty(authorityPropertyKey,
+              PropertyValue.create(result.getAuthorityScore().getValue()));
+      vertex.setProperty(hubPropertyKey, PropertyValue.create(result.getHubScore().getValue()));
+    }
     return vertex;
   }
 }

@@ -23,7 +23,10 @@ import org.gradoop.common.model.impl.pojo.Vertex;
 import org.gradoop.common.model.impl.properties.PropertyValue;
 
 /**
- * Stores the page rank result from the left as a Property in in the right.
+ * Stores the page rank result from the right as a Property in the left.
+ * In case the page rank result is not available for the vertex the
+ * corresponding property will not appear for the vertex.
+ *
  */
 public class PageRankToAttribute
   implements JoinFunction<Vertex, PageRank.Result<GradoopId>, Vertex> {

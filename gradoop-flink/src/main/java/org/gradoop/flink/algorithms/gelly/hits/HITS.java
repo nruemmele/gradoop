@@ -105,9 +105,9 @@ public class HITS extends GellyAlgorithm<NullValue, NullValue> {
   protected LogicalGraph executeInGelly(Graph<GradoopId, NullValue, NullValue> graph)
     throws Exception {
 
-    DataSet<Vertex> newVertices = hits.runInternal(graph)
-      .join(currentGraph.getVertices())
-      .where(new HitsResultKeySelector()).equalTo(new Id<>())
+    DataSet<Vertex> newVertices = currentGraph.getVertices()
+      .join(hits.runInternal(graph))
+      .where(new Id<>()).equalTo(new HitsResultKeySelector())
       .with(new HITSToAttributes(authorityPropertyKey, hubPropertyKey));
 
     return currentGraph.getConfig().getLogicalGraphFactory()
