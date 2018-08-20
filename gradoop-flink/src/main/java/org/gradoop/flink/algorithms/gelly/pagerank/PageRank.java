@@ -90,12 +90,20 @@ public class PageRank extends GellyAlgorithm<NullValue, NullValue> {
   @Override
   protected LogicalGraph executeInGelly(Graph<GradoopId, NullValue, NullValue> graph)
     throws Exception {
-    DataSet<Vertex> newVertices = pageRank
-      .run(graph)
-      .join(currentGraph.getVertices())
-      .where(new PageRankResultKeySelector())
-      .equalTo(new Id<>())
-      .with(new PageRankToAttribute(propertyKey));
+
+    DataSet<Vertex> newVertices = currentGraph.getVertices()
+            .leftOuterJoin(pageRank.run(graph))
+            .where(new Id<>())
+            .equalTo(new PageRankResultKeySelector())
+            .with(new PageRankToAttribute(propertyKey));
+
+//    DataSet<Vertex> newVertices = pageRank
+//      .run(graph)
+//      .join(currentGraph.getVertices())
+//      .where(new PageRankResultKeySelector())
+//      .equalTo(new Id<>())
+//      .with(new PageRankToAttribute(propertyKey));
+
     return currentGraph.getConfig().getLogicalGraphFactory().fromDataSets(newVertices,
       currentGraph.getEdges());
   }

@@ -26,7 +26,7 @@ import org.gradoop.common.model.impl.properties.PropertyValue;
  * Stores the page rank result from the left as a Property in in the right.
  */
 public class PageRankToAttribute
-  implements JoinFunction<PageRank.Result<GradoopId>, Vertex, Vertex> {
+  implements JoinFunction<Vertex, PageRank.Result<GradoopId>, Vertex> {
 
   /**
    * Property to store the page rank in.
@@ -43,8 +43,11 @@ public class PageRankToAttribute
   }
 
   @Override
-  public Vertex join(PageRank.Result result, Vertex vertex) {
-    vertex.setProperty(pageRankPropery, PropertyValue.create(result.getPageRankScore().getValue()));
+  public Vertex join(Vertex vertex, PageRank.Result result) {
+    if (result != null)  {
+      vertex.setProperty(pageRankPropery,
+              PropertyValue.create(result.getPageRankScore().getValue()));
+    }
     return vertex;
   }
 }

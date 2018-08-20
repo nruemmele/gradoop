@@ -158,6 +158,10 @@ In any case you also need Apache Flink (version 1.5.0):
     
     > mvn clean install
     
+   To skip tests and execution of maven checkstyle
+   
+   > mvn clean -DskipTests -Dcheckstyle.skip install
+    
 ## Gradoop modules
 
 ### gradoop-common
