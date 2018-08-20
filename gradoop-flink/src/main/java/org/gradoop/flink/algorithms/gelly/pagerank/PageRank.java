@@ -49,6 +49,11 @@ public class PageRank extends GellyAlgorithm<NullValue, NullValue> {
   private final int iterations;
 
   /**
+   * Gelly PageRank implementation
+   */
+  private org.apache.flink.graph.library.linkanalysis.PageRank<GradoopId, NullValue, NullValue> pageRank;
+
+  /**
    * Constructor for Page Rank with fixed number of iterations.
    *
    * @param propertyKey   Property key to store the rank in.
@@ -60,14 +65,32 @@ public class PageRank extends GellyAlgorithm<NullValue, NullValue> {
     this.propertyKey = propertyKey;
     this.dampingFactor = dampingFactor;
     this.iterations = iterations;
+    pageRank = new org.apache.flink.graph.library.linkanalysis.PageRank<GradoopId, NullValue, NullValue>(
+            dampingFactor, iterations);
+  }
+
+  /**
+   * Constructor for Page Rank with fixed number of iterations.
+   *
+   * @param propertyKey   Property key to store the rank in.
+   * @param dampingFactor Damping factor.
+   * @param iterations    Number of iterations.
+   * @param includeZeroDegreeNodes Boolean whether to include zero degree nodes in the computation.
+   */
+  public PageRank(String propertyKey, double dampingFactor, int iterations, boolean includeZeroDegreeNodes) {
+    super(new VertexToGellyVertexWithNullValue(), new EdgeToGellyEdgeWithNullValue());
+    this.propertyKey = propertyKey;
+    this.dampingFactor = dampingFactor;
+    this.iterations = iterations;
+    pageRank = new org.apache.flink.graph.library.linkanalysis.PageRank<GradoopId, NullValue, NullValue>(
+            dampingFactor, iterations);
+    pageRank.setIncludeZeroDegreeVertices(includeZeroDegreeNodes);
   }
 
   @Override
   protected LogicalGraph executeInGelly(Graph<GradoopId, NullValue, NullValue> graph)
     throws Exception {
-    DataSet<Vertex> newVertices =
-      new org.apache.flink.graph.library.linkanalysis.PageRank<GradoopId, NullValue, NullValue>(
-        dampingFactor, iterations)
+    DataSet<Vertex> newVertices = pageRank
       .run(graph)
       .join(currentGraph.getVertices())
       .where(new PageRankResultKeySelector())
