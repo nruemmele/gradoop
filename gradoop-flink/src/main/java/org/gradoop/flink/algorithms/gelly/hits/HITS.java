@@ -106,7 +106,7 @@ public class HITS extends GellyAlgorithm<NullValue, NullValue> {
     throws Exception {
 
     DataSet<Vertex> newVertices = currentGraph.getVertices()
-      .join(hits.runInternal(graph))
+      .leftOuterJoin(hits.runInternal(graph))
       .where(new Id<>()).equalTo(new HitsResultKeySelector())
       .with(new HITSToAttributes(authorityPropertyKey, hubPropertyKey));
 
