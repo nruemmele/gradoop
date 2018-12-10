@@ -23,7 +23,7 @@
 HDFS="/opt/hadoop/bin/hdfs"
 FLINK="/opt/flink-1.1.2/bin/flink"
 DIR="hdfs:///dimspan"
-JAR="gradoop-examples-0.3.0-SNAPSHOT.jar"
+JAR="gradoop-examples-0.5.0-nruemmele.jar"
 
 # create temp HDFS directory
 ${HDFS} dfs -mkdir ${DIR}
